@@ -42,9 +42,9 @@
 
     .menu-icon {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      font-size: 30px;
+      top: 10px;
+      right: 10px;
+      font-size: 25px;
       cursor: pointer;
       z-index: 10;
     }
@@ -52,8 +52,8 @@
     .menu {
       display: none;
       position: absolute;
-      top: 60px;
-      right: 20px;
+      top: 50px;
+      right: 10px;
       background-color: #333;
       border-radius: 10px;
       padding: 10px;
@@ -63,7 +63,7 @@
 
     .menu a {
       color: white;
-      padding: 10px;
+      padding: 8px;
       text-decoration: none;
       display: block;
     }
@@ -89,8 +89,8 @@
     }
 
     h1 {
-      font-size: 28px;
-      margin-bottom: 30px;
+      font-size: 24px;
+      margin-bottom: 20px;
       background: linear-gradient(90deg, #00c9ff, #92fe9d);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -106,16 +106,16 @@
       display: flex;
       justify-content: center;
       flex-wrap: nowrap;
-      gap: 10px;
-      padding: 10px;
+      gap: 8px;
+      padding: 8px;
       flex-direction: row;
     }
 
     .time-box {
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 15px;
-      width: 90px;
+      border-radius: 15px;
+      padding: 12px;
+      width: 80px;
       text-align: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       transition: transform 0.3s ease;
@@ -126,13 +126,13 @@
     }
 
     .number {
-      font-size: 26px;
+      font-size: 22px;
       font-weight: bold;
     }
 
     .label {
-      font-size: 14px;
-      margin-top: 8px;
+      font-size: 12px;
+      margin-top: 5px;
     }
 
     .day { color: #1abc9c; }
@@ -141,8 +141,8 @@
     .second { color: #9b59b6; }
 
     footer {
-      margin-top: 30px;
-      font-size: 14px;
+      margin-top: 20px;
+      font-size: 12px;
       color: #aaa;
       text-align: center;
     }
@@ -160,17 +160,17 @@
     }
 
     #loader img {
-      width: 120px;
+      width: 100px;
       animation: bounce 2s infinite;
     }
 
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
+      50% { transform: translateY(-15px); }
     }
 
     #loader-text {
-      font-size: 18px;
+      font-size: 16px;
       color: white;
       animation: pulse 2s infinite ease-in-out;
     }
@@ -178,31 +178,36 @@
     /* تحسينات الهاتف المحمول */
     @media (max-width: 768px) {
       .menu-icon {
-        font-size: 25px;
-        top: 15px;
-        right: 15px;
+        font-size: 22px;
+        top: 8px;
+        right: 8px;
       }
 
       #main-content {
-        padding: 10px;
+        padding: 8px;
       }
 
       h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
+        font-size: 20px;
+        margin-bottom: 15px;
       }
 
       .time-box {
-        width: 70px;
-        padding: 10px;
+        width: 60px;
+        padding: 8px;
       }
 
       .number {
-        font-size: 22px;
+        font-size: 20px;
       }
 
       .label {
-        font-size: 12px;
+        font-size: 10px;
+      }
+
+      footer {
+        font-size: 10px;
+        margin-top: 15px;
       }
     }
   </style>
@@ -302,13 +307,13 @@
 
       document.getElementById("main-content").style.display = "none";
       document.getElementById("loader").style.display = "flex";
-      document.getElementById("menu").classList.remove("show-menu"); // إخفاء القائمة
+      document.getElementById("menu").classList.remove("show-menu");
 
       setTimeout(() => {
         updateCountdown();
         document.getElementById("loader").style.display = "none";
         document.getElementById("main-content").style.display = "flex";
-        document.getElementById("menu").classList.remove("show-menu"); // إخفاء القائمة بعد التحميل
+        document.getElementById("menu").classList.remove("show-menu");
       }, 5000);
     }
 
@@ -316,7 +321,7 @@
       setTimeout(() => {
         document.getElementById("loader").style.display = "none";
         document.getElementById("main-content").style.display = "flex";
-        document.getElementById("menu").classList.remove("show-menu"); // إخفاء القائمة بعد التحميل
+        document.getElementById("menu").classList.remove("show-menu");
       }, 5000);
     };
   </script>
