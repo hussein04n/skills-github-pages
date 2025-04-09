@@ -1,190 +1,304 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>العد التنازلي للامتحانات</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>امتحان البكتريا الوزاري</title>
+  <link id="favicon" rel="icon" type="image/png" href="logo-bacteria.png">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-      color: white;
-      text-align: center;
-    }
-
-    .loader {
-      position: fixed;
-      width: 100%;
+    html, body {
       height: 100%;
-      background: #111;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      z-index: 9999;
-      transition: opacity 0.5s ease;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      overflow: hidden;
     }
 
-    .hidden {
-      opacity: 0;
-      visibility: hidden;
+    .bg-smoke {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 150%;
+      height: 150%;
+      background: radial-gradient(circle, rgba(255,255,255,0.03), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
+      opacity: 0.3;
+      animation: moveSmoke 60s linear infinite;
     }
 
-    .menu-toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      z-index: 10;
-      cursor: pointer;
+    .smoke1 { animation-delay: 0s; }
+    .smoke2 { animation-delay: 30s; }
+
+    @keyframes moveSmoke {
+      0% { transform: translate(0%, 0%) scale(1.2); }
+      50% { transform: translate(-10%, -10%) scale(1.3); }
+      100% { transform: translate(0%, 0%) scale(1.2); }
     }
 
     .menu-icon {
-      width: 30px;
-      height: 3px;
-      background-color: white;
-      margin: 6px 0;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 30px;
+      cursor: pointer;
+      z-index: 10;
     }
 
     .menu {
-      position: absolute;
-      top: 70px;
-      right: 20px;
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 10px;
-      border-radius: 10px;
       display: none;
-      z-index: 9;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background-color: #333;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: right;
+      z-index: 10;
     }
 
     .menu a {
-      display: block;
       color: white;
+      padding: 10px;
       text-decoration: none;
-      margin: 10px 0;
-      background-color: #444;
-      padding: 8px;
-      border-radius: 8px;
+      display: block;
     }
 
-    .countdown {
+    .menu a:hover {
+      background-color: #555;
+    }
+
+    .show-menu {
+      display: block;
+    }
+
+    #main-content {
+      display: none;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 30px;
+      background: linear-gradient(90deg, #00c9ff, #92fe9d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+    }
+
+    #timer {
       display: flex;
       justify-content: center;
+      flex-wrap: nowrap;
       gap: 10px;
-      margin-top: 30px;
-      flex-wrap: wrap;
+      padding: 10px;
+      flex-direction: row;
     }
 
     .time-box {
-      background: rgba(0,0,0,0.3);
-      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 20px;
-      min-width: 80px;
+      padding: 15px;
+      width: 90px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
     }
 
-    .time-box span {
-      display: block;
-      font-size: 24px;
+    .time-box:hover {
+      transform: translateY(-5px);
     }
 
-    #bacteria, #parasite {
-      display: none;
+    .number {
+      font-size: 26px;
+      font-weight: bold;
     }
 
-    .active {
-      display: block;
+    .label {
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .day { color: #1abc9c; }
+    .hour { color: #e74c3c; }
+    .minute { color: #f39c12; }
+    .second { color: #9b59b6; }
+
+    footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #aaa;
+      text-align: center;
+    }
+
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: #0f2027;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    #loader img {
+      width: 120px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    #loader-text {
+      font-size: 18px;
+      color: white;
+      animation: pulse 2s infinite ease-in-out;
     }
   </style>
 </head>
 <body>
-  <div class="loader" id="loader">تحميل...</div>
+  <!-- دخان الخلفية -->
+  <div class="bg-smoke smoke1"></div>
+  <div class="bg-smoke smoke2"></div>
 
-  <div class="menu-toggle" id="toggleBtn">
-    <div class="menu-icon"></div>
-    <div class="menu-icon"></div>
-    <div class="menu-icon"></div>
+  <!-- شاشة التحميل -->
+  <div id="loader">
+    <img id="loader-logo" src="logo-bacteria.png" alt="شعار الامتحان">
+    <div id="loader-text">جارٍ التحميل...</div>
   </div>
 
-  <div class="menu" id="menu">
-    <a href="#" onclick="showSection('bacteria')">امتحان البكتريا الوزاري</a>
-    <a href="#" onclick="showSection('parasite')">امتحان الطفيليات الوزاري</a>
+  <!-- قائمة الشرطات -->
+  <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+  <div id="menu" class="menu">
+    <a href="#" onclick="switchExam()">امتحان الطفيليات الوزاري</a>
   </div>
 
-  <div id="bacteria" class="active">
-    <h1 style="margin-top: 100px;">امتحان البكتريا الوزاري</h1>
-    <div class="countdown" id="bacteria-timer">
-      <div class="time-box"><span id="b-days"></span>يوم</div>
-      <div class="time-box"><span id="b-hours"></span>ساعة</div>
-      <div class="time-box"><span id="b-minutes"></span>دقيقة</div>
-      <div class="time-box"><span id="b-seconds"></span>ثانية</div>
+  <!-- المحتوى الرئيسي -->
+  <div id="main-content">
+    <h1 id="examTitle">امتحان البكتريا الوزاري</h1>
+    <div id="timer">
+      <div class="time-box day">
+        <div class="number" id="days">--</div>
+        <div class="label">يوم</div>
+      </div>
+      <div class="time-box hour">
+        <div class="number" id="hours">--</div>
+        <div class="label">ساعة</div>
+      </div>
+      <div class="time-box minute">
+        <div class="number" id="minutes">--</div>
+        <div class="label">دقيقة</div>
+      </div>
+      <div class="time-box second">
+        <div class="number" id="seconds">--</div>
+        <div class="label">ثانية</div>
+      </div>
     </div>
-    <p>العد التنازلي لامتحان البكتريا الوزاري - بالتوفيق</p>
-  </div>
-
-  <div id="parasite">
-    <h1 style="margin-top: 100px;">امتحان الطفيليات الوزاري</h1>
-    <div class="countdown" id="parasite-timer">
-      <div class="time-box"><span id="p-days"></span>يوم</div>
-      <div class="time-box"><span id="p-hours"></span>ساعة</div>
-      <div class="time-box"><span id="p-minutes"></span>دقيقة</div>
-      <div class="time-box"><span id="p-seconds"></span>ثانية</div>
-    </div>
-    <p>العد التنازلي لامتحان الطفيليات الوزاري - بالتوفيق</p>
+    <footer id="footer">العد التنازلي لامتحان البكتريا الوزاري - بالتوفيق</footer>
   </div>
 
   <script>
-    // شاشة التحميل
-    window.onload = () => {
-      setTimeout(() => {
-        document.getElementById("loader").classList.add("hidden");
-      }, 5000);
-    };
+    let examType = 'bacteria';
+    let targetDate = new Date("May 4, 2025 10:00:00 GMT+3").getTime();
 
-    // التنقل بين الصفحات داخل الصفحة
-    function showSection(sectionId) {
-      document.getElementById("bacteria").classList.remove("active");
-      document.getElementById("parasite").classList.remove("active");
-      document.getElementById(sectionId).classList.add("active");
-      document.getElementById("menu").style.display = "none"; // إخفاء القائمة بعد الاختيار
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        document.getElementById("timer").innerHTML = "<h2>حان وقت الامتحان!</h2>";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById("days").innerText = days;
+      document.getElementById("hours").innerText = hours;
+      document.getElementById("minutes").innerText = minutes;
+      document.getElementById("seconds").innerText = seconds;
     }
 
-    // القائمة المنبثقة
-    const toggleBtn = document.getElementById("toggleBtn");
-    const menu = document.getElementById("menu");
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
 
-    toggleBtn.addEventListener("click", () => {
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
-    });
+    function toggleMenu() {
+      document.getElementById('menu').classList.toggle('show-menu');
+    }
 
-    window.addEventListener("click", (e) => {
-      if (!menu.contains(e.target) && !toggleBtn.contains(e.target)) {
-        menu.style.display = "none";
+    // إغلاق القائمة عند النقر خارجها
+    window.onclick = function(event) {
+      const menu = document.getElementById('menu');
+      if (!event.target.matches('.menu-icon') && !event.target.matches('#menu') && !event.target.matches('#menu a')) {
+        if (menu.classList.contains('show-menu')) {
+          menu.classList.remove('show-menu');
+        }
       }
-    });
+    };
 
-    // عداد البكتريا (4 مايو 2025 الساعة 10:00 صباحاً)
-    const bacteriaDate = new Date("2025-05-04T10:00:00").getTime();
-    setInterval(() => {
-      const now = new Date().getTime();
-      const diff = bacteriaDate - now;
+    // إخفاء القائمة عند النقر على رابط داخلها
+    function switchExam() {
+      if (examType === 'bacteria') {
+        examType = 'parasites';
+        targetDate = new Date("May 8, 2025 10:00:00 GMT+3").getTime();
+        document.getElementById("examTitle").innerText = "امتحان الطفيليات الوزاري";
+        document.getElementById("footer").innerText = "العد التنازلي لامتحان الطفيليات الوزاري - بالتوفيق";
+        document.querySelector("#menu a").innerText = "امتحان البكتريا الوزاري";
+        document.getElementById("favicon").href = "logo-parasite.png";
+        document.getElementById("loader-logo").src = "logo-parasite.png";
+        document.title = "امتحان الطفيليات الوزاري";
+      } else {
+        examType = 'bacteria';
+        targetDate = new Date("May 4, 2025 10:00:00 GMT+3").getTime();
+        document.getElementById("examTitle").innerText = "امتحان البكتريا الوزاري";
+        document.getElementById("footer").innerText = "العد التنازلي لامتحان البكتريا الوزاري - بالتوفيق";
+        document.querySelector("#menu a").innerText = "امتحان الطفيليات الوزاري";
+        document.getElementById("favicon").href = "logo-bacteria.png";
+        document.getElementById("loader-logo").src = "logo-bacteria.png";
+        document.title = "امتحان البكتريا الوزاري";
+      }
 
-      document.getElementById("b-days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-      document.getElementById("b-hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      document.getElementById("b-minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      document.getElementById("b-seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000);
-    }, 1000);
+      document.getElementById("main-content").style.display = "none";
+      document.getElementById("loader").style.display = "flex";
+      document.getElementById("menu").classList.remove("show-menu"); // إخفاء القائمة
 
-    // عداد الطفيليات (8 مايو 2025 الساعة 10:00 صباحاً)
-    const parasiteDate = new Date("2025-05-08T10:00:00").getTime();
-    setInterval(() => {
-      const now = new Date().getTime();
-      const diff = parasiteDate - now;
+      setTimeout(() => {
+        updateCountdown();
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("main-content").style.display = "flex";
+        document.getElementById("menu").classList.remove("show-menu"); // إخفاء القائمة بعد التحميل
+      }, 5000);
+    }
 
-      document.getElementById("p-days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-      document.getElementById("p-hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      document.getElementById("p-minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      document.getElementById("p-seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000);
-    }, 1000);
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("main-content").style.display = "flex";
+        document.getElementById("menu").classList.remove("show-menu"); // إخفاء القائمة بعد التحميل
+      }, 5000);
+    };
   </script>
 </body>
 </html>
