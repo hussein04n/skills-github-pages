@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>امتحان البكتريا الوزاري</title>
-  <link id="favicon" rel="icon" type="image/png" href="logo-bacteria.png">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
+  <link id="favicon" rel="icon" type="image/png" href="logo-bacteria.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap" rel="stylesheet" />
   <style>
     html, body {
       height: 100%;
@@ -14,31 +14,52 @@
       font-family: 'Tajawal', sans-serif;
       background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
       color: white;
+      overflow: hidden;
+    }
+
+    /* شاشة التحميل */
+    #loader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #0f2027;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      text-align: center;
+      z-index: 9999;
+    }
+
+    #loader-logo {
+      width: 120px;
+      height: 120px;
+      animation: pulseLogo 2s infinite;
+    }
+
+    @keyframes pulseLogo {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
     }
 
     .menu-icon {
-      position: absolute;
+      position: fixed;
       top: 20px;
       right: 20px;
-      font-size: 28px;
+      font-size: 30px;
       cursor: pointer;
-      z-index: 10;
+      z-index: 1000;
     }
 
     .menu {
       display: none;
-      position: absolute;
+      position: fixed;
       top: 60px;
       right: 20px;
       background-color: #333;
       border-radius: 10px;
       padding: 10px;
       text-align: right;
-      z-index: 9;
+      z-index: 1000;
     }
 
     .menu a {
@@ -56,10 +77,18 @@
       display: block;
     }
 
+    #main-content {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
     h1 {
-      font-size: 24px;
-      margin-top: 80px; /* لإبعاد العنوان عن أيقونة القائمة */
-      margin-bottom: 20px;
+      font-size: 30px;
+      margin-bottom: 30px;
       background: linear-gradient(90deg, #00c9ff, #92fe9d);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -73,21 +102,20 @@
 
     #timer {
       display: flex;
-      justify-content: space-around;
-      gap: 8px;
-      padding: 10px;
-      width: 90%;
-      flex-wrap: nowrap;
+      flex-direction: row;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+      flex-wrap: wrap;
     }
 
     .time-box {
-      flex: 1 1 20%;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 12px;
+      border-radius: 20px;
+      padding: 15px;
+      width: 80px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.3);
       transition: transform 0.3s ease;
-      min-width: 70px;
     }
 
     .time-box:hover {
@@ -95,13 +123,13 @@
     }
 
     .number {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: bold;
     }
 
     .label {
-      font-size: 12px;
-      margin-top: 5px;
+      font-size: 14px;
+      margin-top: 8px;
     }
 
     .day { color: #1abc9c; }
@@ -110,66 +138,48 @@
     .second { color: #9b59b6; }
 
     footer {
-      font-size: 12px;
+      margin-top: 20px;
+      font-size: 14px;
       color: #aaa;
-      padding: 10px;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 20px;
-        margin-top: 80px;
-      }
-
-      .time-box {
-        flex: 1 1 18%;
-        padding: 8px;
-        min-width: 60px;
-      }
-
-      .number {
-        font-size: 20px;
-      }
-
-      .label {
-        font-size: 10px;
-      }
-
-      footer {
-        font-size: 10px;
-        padding: 5px;
-      }
     }
   </style>
 </head>
 <body>
+
+  <!-- شاشة التحميل -->
+  <div id="loader">
+    <img id="loader-logo" src="logo-bacteria.png" alt="Loading..." />
+  </div>
+
+  <!-- القائمة -->
   <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
   <div id="menu" class="menu">
     <a href="#" onclick="switchExam()">امتحان الطفيليات الوزاري</a>
   </div>
 
-  <h1 id="examTitle">امتحان البكتريا الوزاري</h1>
-
-  <div id="timer">
-    <div class="time-box day">
-      <div class="number" id="days">--</div>
-      <div class="label">يوم</div>
+  <!-- المحتوى الرئيسي -->
+  <div id="main-content" style="display: none;">
+    <h1 id="examTitle">امتحان البكتريا الوزاري</h1>
+    <div id="timer">
+      <div class="time-box day">
+        <div class="number" id="days">--</div>
+        <div class="label">يوم</div>
+      </div>
+      <div class="time-box hour">
+        <div class="number" id="hours">--</div>
+        <div class="label">ساعة</div>
+      </div>
+      <div class="time-box minute">
+        <div class="number" id="minutes">--</div>
+        <div class="label">دقيقة</div>
+      </div>
+      <div class="time-box second">
+        <div class="number" id="seconds">--</div>
+        <div class="label">ثانية</div>
+      </div>
     </div>
-    <div class="time-box hour">
-      <div class="number" id="hours">--</div>
-      <div class="label">ساعة</div>
-    </div>
-    <div class="time-box minute">
-      <div class="number" id="minutes">--</div>
-      <div class="label">دقيقة</div>
-    </div>
-    <div class="time-box second">
-      <div class="number" id="seconds">--</div>
-      <div class="label">ثانية</div>
-    </div>
+    <footer id="footer">العد التنازلي لامتحان البكتريا الوزاري - بالتوفيق</footer>
   </div>
-
-  <footer id="footer">العد التنازلي لامتحان البكتريا الوزاري - بالتوفيق</footer>
 
   <script>
     let examType = 'bacteria';
@@ -195,9 +205,6 @@
       document.getElementById("seconds").innerText = seconds;
     }
 
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-
     function toggleMenu() {
       document.getElementById('menu').classList.toggle('show-menu');
     }
@@ -206,20 +213,48 @@
       if (examType === 'bacteria') {
         examType = 'parasites';
         targetDate = new Date("May 8, 2025 10:00:00 GMT+3").getTime();
-        document.getElementById("examTitle").innerText = "امتحان الطفيليات الوزاري";
-        document.getElementById("footer").innerText = "العد التنازلي لامتحان الطفيليات الوزاري - بالتوفيق";
-        document.querySelector("#menu a").innerText = "امتحان البكتريا الوزاري";
-        document.getElementById("favicon").href = "logo-parasite.png";
+        showLoader('logo-parasite.png', () => {
+          document.getElementById("examTitle").innerText = "امتحان الطفيليات الوزاري";
+          document.getElementById("footer").innerText = "العد التنازلي لامتحان الطفيليات الوزاري - بالتوفيق";
+          document.querySelector("#menu a").innerText = "امتحان البكتريا الوزاري";
+          document.getElementById("favicon").href = "logo-parasite.png";
+          updateCountdown();
+        });
       } else {
         examType = 'bacteria';
         targetDate = new Date("May 4, 2025 10:00:00 GMT+3").getTime();
-        document.getElementById("examTitle").innerText = "امتحان البكتريا الوزاري";
-        document.getElementById("footer").innerText = "العد التنازلي لامتحان البكتريا الوزاري - بالتوفيق";
-        document.querySelector("#menu a").innerText = "امتحان الطفيليات الوزاري";
-        document.getElementById("favicon").href = "logo-bacteria.png";
+        showLoader('logo-bacteria.png', () => {
+          document.getElementById("examTitle").innerText = "امتحان البكتريا الوزاري";
+          document.getElementById("footer").innerText = "العد التنازلي لامتحان البكتريا الوزاري - بالتوفيق";
+          document.querySelector("#menu a").innerText = "امتحان الطفيليات الوزاري";
+          document.getElementById("favicon").href = "logo-bacteria.png";
+          updateCountdown();
+        });
       }
-      updateCountdown();
     }
+
+    function showLoader(logoSrc, callback) {
+      const loader = document.getElementById('loader');
+      const logo = document.getElementById('loader-logo');
+
+      logo.src = logoSrc;
+      loader.style.display = 'flex';
+      document.getElementById('main-content').style.display = 'none';
+
+      setTimeout(() => {
+        loader.style.display = 'none';
+        document.getElementById('main-content').style.display = 'flex';
+        if (callback) callback();
+      }, 5000);
+    }
+
+    window.onload = () => {
+      showLoader('logo-bacteria.png', () => {
+        document.getElementById('main-content').style.display = 'flex';
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+      });
+    };
   </script>
 </body>
 </html>
