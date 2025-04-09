@@ -12,32 +12,39 @@
       margin: 0;
       padding: 0;
       font-family: 'Tajawal', sans-serif;
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      background: #0f2027;
       color: white;
       overflow: hidden;
+      position: relative;
     }
 
-    .bg-smoke {
-      position: fixed;
+    /* تأثير الدخان */
+    .smoke-effect {
+      position: absolute;
       top: 0;
       left: 0;
-      width: 150%;
-      height: 150%;
-      background: radial-gradient(circle, rgba(255,255,255,0.03), transparent 70%);
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent 70%);
       pointer-events: none;
       z-index: 0;
-      filter: blur(80px);
+      animation: smokeMovement 60s linear infinite;
       opacity: 0.3;
-      animation: moveSmoke 60s linear infinite;
     }
 
-    .smoke1 { animation-delay: 0s; }
-    .smoke2 { animation-delay: 30s; }
-
-    @keyframes moveSmoke {
-      0% { transform: translate(0%, 0%) scale(1.2); }
-      50% { transform: translate(-10%, -10%) scale(1.3); }
-      100% { transform: translate(0%, 0%) scale(1.2); }
+    @keyframes smokeMovement {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+      }
+      50% {
+        transform: translate(-10%, -10%) scale(1.2);
+        opacity: 0.5;
+      }
+      100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+      }
     }
 
     .menu-icon {
@@ -213,9 +220,8 @@
   </style>
 </head>
 <body>
-  <!-- دخان الخلفية -->
-  <div class="bg-smoke smoke1"></div>
-  <div class="bg-smoke smoke2"></div>
+  <!-- تأثير الدخان المتحرك -->
+  <div class="smoke-effect"></div>
 
   <!-- شاشة التحميل -->
   <div id="loader">
