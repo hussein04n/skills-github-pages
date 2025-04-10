@@ -131,14 +131,16 @@
     }
 
     .label {
-      font-size: 12px;
-      margin-top: 5px;
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: bold;
     }
 
-    .day { color: #c39bd3; }
-    .hour { color: #bb8fce; }
-    .minute { color: #9b59b6; }
-    .second { color: #7d3c98; }
+    .day .label { color: #c39bd3; }
+    .hour .label { color: #bb8fce; }
+    .minute .label { color: #9b59b6; }
+    .second .label { color: #7d3c98; }
+
 
     footer {
       margin-top: 20px;
@@ -262,7 +264,6 @@
         <div class="label">ثانية</div>
       </div>
     </div>
-    <footer id="footer">العد التنازلي لامتحان البكتريا الوزاري - بالتوفيق</footer>
   </div>
 
   <script>
@@ -301,7 +302,6 @@
         examType = 'parasites';
         targetDate = new Date("May 8, 2025 10:00:00 GMT+3").getTime();
         document.getElementById("examTitle").innerText = "امتحان الطفيليات الوزاري";
-        document.getElementById("footer").innerText = "العد التنازلي لامتحان الطفيليات الوزاري - بالتوفيق";
         document.querySelector("#menu a").innerText = "امتحان البكتريا الوزاري";
         document.getElementById("favicon").href = "logo-parasite.png";
         document.getElementById("loader-logo").src = "logo-parasite.png";
@@ -310,7 +310,6 @@
         examType = 'bacteria';
         targetDate = new Date("May 4, 2025 10:00:00 GMT+3").getTime();
         document.getElementById("examTitle").innerText = "امتحان البكتريا الوزاري";
-        document.getElementById("footer").innerText = "العد التنازلي لامتحان البكتريا الوزاري - بالتوفيق";
         document.querySelector("#menu a").innerText = "امتحان الطفيليات الوزاري";
         document.getElementById("favicon").href = "logo-bacteria.png";
         document.getElementById("loader-logo").src = "logo-bacteria.png";
