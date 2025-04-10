@@ -25,7 +25,7 @@
       height: 200%;
       background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
       pointer-events: none;
-      z-index: 0;
+      z-index: -1;
       filter: blur(80px);
       animation: moveSmoke 40s ease-in-out infinite alternate, glowPulse 4s ease-in-out infinite;
       opacity: 0.4;
@@ -38,8 +38,8 @@
     }
 
     @keyframes glowPulse {
-      0%, 100% { opacity: 0.3; filter: blur(80px) brightness(1); }
-      50% { opacity: 0.6; filter: blur(100px) brightness(1.3); }
+      0% { box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.3); }
+      100% { box-shadow: 0 0 30px 20px rgba(255, 255, 255, 0.6); }
     }
 
     .menu-icon {
@@ -49,6 +49,12 @@
       font-size: 25px;
       cursor: pointer;
       z-index: 10;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .menu-icon:active {
+      transform: scale(1.1);
+      color: #9b59b6;
     }
 
     .menu {
@@ -92,17 +98,10 @@
 
     h1 {
       font-size: 24px;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       color: #e0d7ff;
       text-shadow: 0 0 10px #b084f5;
       animation: pulse 3s infinite ease-in-out;
-    }
-
-    .exam-date {
-      font-size: 16px;
-      color: #e0d7ff;
-      margin-bottom: 20px;
-      text-shadow: 0 0 5px #b084f5;
     }
 
     @keyframes pulse {
@@ -133,18 +132,28 @@
       transform: translateY(-5px);
     }
 
-    .number, .label {
-      color: #e0d7ff;
-      font-weight: bold;
-    }
-
     .number {
       font-size: 22px;
+      font-weight: bold;
+      color: #e0d7ff;
     }
 
     .label {
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: bold;
+    }
+
+    .day .label { color: #e0d7ff; }
+    .hour .label { color: #e0d7ff; }
+    .minute .label { color: #e0d7ff; }
+    .second .label { color: #e0d7ff; }
+
+    footer {
+      margin-top: 20px;
       font-size: 12px;
-      margin-top: 5px;
+      color: #ddd;
+      text-align: center;
     }
 
     #loader {
@@ -191,13 +200,38 @@
     }
 
     @media (max-width: 768px) {
-      .menu-icon { font-size: 22px; top: 8px; right: 8px; }
-      #main-content { padding: 8px; }
-      h1 { font-size: 20px; margin-bottom: 10px; }
-      .exam-date { font-size: 14px; margin-bottom: 15px; }
-      .time-box { width: 60px; padding: 8px; }
-      .number { font-size: 20px; }
-      .label { font-size: 10px; }
+      .menu-icon {
+        font-size: 22px;
+        top: 8px;
+        right: 8px;
+      }
+
+      #main-content {
+        padding: 8px;
+      }
+
+      h1 {
+        font-size: 20px;
+        margin-bottom: 15px;
+      }
+
+      .time-box {
+        width: 60px;
+        padding: 8px;
+      }
+
+      .number {
+        font-size: 20px;
+      }
+
+      .label {
+        font-size: 10px;
+      }
+
+      footer {
+        font-size: 10px;
+        margin-top: 15px;
+      }
     }
   </style>
 </head>
@@ -218,7 +252,6 @@
 
   <div id="main-content">
     <h1 id="examTitle">امتحان البكتريا الوزاري</h1>
-    <div class="exam-date" id="examDate">تاريخ الامتحان: الأحد 2025/5/4 الساعة 9:00 صباحاً</div>
     <div id="timer">
       <div class="time-box day">
         <div class="number" id="days">--</div>
@@ -241,7 +274,7 @@
 
   <script>
     let examType = 'bacteria';
-    let targetDate = new Date("May 4, 2025 09:00:00 GMT+3").getTime();
+    let targetDate = new Date("2025/5/4 09:00:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -267,24 +300,24 @@
     updateCountdown();
 
     function toggleMenu() {
+      const menuIcon = document.querySelector('.menu-icon');
+      menuIcon.classList.toggle('active');  // إضافة تغيير للحالة عند النقر
       document.getElementById('menu').classList.toggle('show-menu');
     }
 
     function switchExam() {
       if (examType === 'bacteria') {
         examType = 'parasites';
-        targetDate = new Date("May 8, 2025 09:00:00 GMT+3").getTime();
+        targetDate = new Date("2025/5/8 09:00:00").getTime();
         document.getElementById("examTitle").innerText = "امتحان الطفيليات الوزاري";
-        document.getElementById("examDate").innerText = "تاريخ الامتحان: الخميس 2025/5/8 الساعة 9:00 صباحاً";
         document.querySelector("#menu a").innerText = "امتحان البكتريا الوزاري";
         document.getElementById("favicon").href = "logo-parasite.png";
         document.getElementById("loader-logo").src = "logo-parasite.png";
         document.title = "امتحان الطفيليات الوزاري";
       } else {
         examType = 'bacteria';
-        targetDate = new Date("May 4, 2025 09:00:00 GMT+3").getTime();
+        targetDate = new Date("2025/5/4 09:00:00").getTime();
         document.getElementById("examTitle").innerText = "امتحان البكتريا الوزاري";
-        document.getElementById("examDate").innerText = "تاريخ الامتحان: الأحد 2025/5/4 الساعة 9:00 صباحاً";
         document.querySelector("#menu a").innerText = "امتحان الطفيليات الوزاري";
         document.getElementById("favicon").href = "logo-bacteria.png";
         document.getElementById("loader-logo").src = "logo-bacteria.png";
