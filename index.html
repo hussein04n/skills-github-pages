@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -256,15 +256,12 @@
 
   <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
   <div id="menu" class="menu">
-    <a href="#" onclick="switchExam('bacteria')">امتحان البكتريا الوزاري</a>
-    <a href="#" onclick="switchExam('parasites')">امتحان الطفيليات الوزاري</a>
-    <a href="#" onclick="switchExam('second-round-bacteria')">امتحان البكتريا في الدور الثاني</a>
-    <a href="#" onclick="switchExam('second-round-parasites')">امتحان الطفيليات في الدور الثاني</a>
+    <a href="#" onclick="switchExam()">امتحان الطفيليات الوزاري</a>
   </div>
 
   <div id="main-content">
     <h1 id="examTitle">امتحان البكتريا الوزاري</h1>
-    <div id="examDate"></div>
+    <div id="examDate"></div> <!-- هنا يظهر تاريخ الامتحان -->
 
     <div id="timer">
       <div class="time-box day">
@@ -288,7 +285,7 @@
 
   <script>
     let examType = 'bacteria';
-    let targetDate = new Date("2025/9/1 09:00:00").getTime();
+    let targetDate = new Date("2025/5/4 09:00:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -321,7 +318,7 @@
 
     setInterval(updateCountdown, 1000);
     updateCountdown();
-    updateExamDate();
+    updateExamDate();  // تحديث تاريخ الامتحان
 
     function toggleMenu() {
       const menuIcon = document.querySelector('.menu-icon');
@@ -329,47 +326,43 @@
       document.getElementById('menu').classList.toggle('show-menu');
     }
 
-    function switchExam(type) {
-      let newExamTitle = "";
-      let newLogo = "";
-      let newTargetDate = new Date("2025/9/1 09:00:00").getTime();
-      let newFavicon = "";
-
-      if (type === 'bacteria') {
-        newExamTitle = "امتحان البكتريا الوزاري";
-        newLogo = "logo-bacteria.png";
-        newFavicon = "logo-bacteria.png";
-      } else if (type === 'parasites') {
-        newExamTitle = "امتحان الطفيليات الوزاري";
-        newLogo = "logo-parasite.png";
-        newFavicon = "logo-parasite.png";
-      } else if (type === 'second-round-bacteria') {
-        newExamTitle = "امتحان البكتريا في الدور الثاني";
-        newLogo = "logo-bacteria.png";
-        newFavicon = "logo-bacteria.png";
-      } else if (type === 'second-round-parasites') {
-        newExamTitle = "امتحان الطفيليات في الدور الثاني";
-        newLogo = "logo-parasite.png";
-        newFavicon = "logo-parasite.png";
+    function switchExam() {
+      if (examType === 'bacteria') {
+        examType = 'parasites';
+        targetDate = new Date("2025/5/8 09:00:00").getTime();
+        document.getElementById("examTitle").innerText = "امتحان الطفيليات الوزاري";
+        document.querySelector("#menu a").innerText = "امتحان البكتريا الوزاري";
+        document.getElementById("favicon").href = "logo-parasite.png";
+        document.getElementById("loader-logo").src = "logo-parasite.png";
+        document.title = "امتحان الطفيليات الوزاري";
+      } else {
+        examType = 'bacteria';
+        targetDate = new Date("2025/5/4 09:00:00").getTime();
+        document.getElementById("examTitle").innerText = "امتحان البكتريا الوزاري";
+        document.querySelector("#menu a").innerText = "امتحان الطفيليات الوزاري";
+        document.getElementById("favicon").href = "logo-bacteria.png";
+        document.getElementById("loader-logo").src = "logo-bacteria.png";
+        document.title = "امتحان البكتريا الوزاري";
       }
 
-      document.getElementById("examTitle").innerText = newExamTitle;
-      document.getElementById("favicon").href = newFavicon;
-      document.getElementById("loader-logo").src = newLogo;
-      document.title = newExamTitle;
-
-      targetDate = newTargetDate;
-      updateExamDate();
-      updateCountdown();
-      
       document.getElementById("main-content").style.display = "none";
       document.getElementById("loader").style.display = "flex";
-      
+      document.getElementById("menu").classList.remove("show-menu");
+
       setTimeout(() => {
+        updateCountdown();
+        updateExamDate();  // تحديث تاريخ الامتحان عند التبديل
         document.getElementById("loader").style.display = "none";
         document.getElementById("main-content").style.display = "flex";
       }, 5000);
     }
+
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("main-content").style.display = "flex";
+      }, 5000);
+    };
   </script>
 </body>
 </html>
