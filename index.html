@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>امتحان البكتريا الوزاري</title>
-  <link id="favicon" rel="icon" type="image/png" href="logo-bacteria.png">
+  <title>امتحان الدور الثاني</title>
+  <link id="favicon" rel="icon" type="image/png" href="logo-god.png">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
   <style>
     html, body {
@@ -12,7 +12,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Tajawal', sans-serif;
-      background: linear-gradient(to right, #2a0845, #6441a5);
+      background: linear-gradient(to right, #c0392b, #e74c3c); /* الأحمر */
       color: white;
       overflow: hidden;
     }
@@ -86,6 +86,9 @@
     }
 
     #main-content {
+      display: none;
+      height: 100vh;
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -246,21 +249,19 @@
 
   <div id="loader">
     <div class="logo-wrapper">
-      <img id="loader-logo" src="logo-bacteria.png" alt="شعار الامتحان">
+      <img id="loader-logo" src="god.png" alt="شعار الامتحان">
     </div>
     <div id="loader-text">جارٍ التحميل...</div>
   </div>
 
   <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
   <div id="menu" class="menu">
-    <a href="#" onclick="switchExam('bacteria')">امتحان البكتريا الوزاري</a>
-    <a href="#" onclick="switchExam('parasites')">امتحان الطفيليات الوزاري</a>
-    <a href="#" onclick="switchExam('second_round')">امتحان الدور الثاني</a>
+    <a href="#" onclick="switchExam()">امتحان الدور الثاني</a>
   </div>
 
   <div id="main-content">
-    <h1 id="examTitle">امتحان البكتريا الوزاري</h1>
-    <div id="examDate"></div>
+    <h1 id="examTitle">امتحان الدور الثاني</h1>
+    <div id="examDate"></div> <!-- هنا يظهر تاريخ الامتحان -->
 
     <div id="timer">
       <div class="time-box day">
@@ -283,8 +284,8 @@
   </div>
 
   <script>
-    let examType = 'bacteria';
-    let targetDate = new Date("2025/5/4 09:00:00").getTime();
+    let examType = 'god';
+    let targetDate = new Date("2025/5/8 09:00:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -315,32 +316,28 @@
       document.getElementById("examDate").innerText = `يوم ${dayOfWeek}، ${dateFormatted} الساعة 9 صباحًا`;
     }
 
-    function switchExam(exam) {
-      if (exam === 'bacteria') {
-        examType = 'bacteria';
-        targetDate = new Date("2025/5/4 09:00:00").getTime();
-        document.getElementById("examTitle").innerText = "امتحان البكتريا الوزاري";
-        document.getElementById("favicon").href = "logo-bacteria.png";
-        document.getElementById("loader-logo").src = "logo-bacteria.png";
-        document.body.style.background = "linear-gradient(to right, #2a0845, #6441a5)";
-      } else if (exam === 'parasites') {
-        examType = 'parasites';
-        targetDate = new Date("2025/5/8 09:00:00").getTime();
-        document.getElementById("examTitle").innerText = "امتحان الطفيليات الوزاري";
-        document.getElementById("favicon").href = "logo-parasite.png";
-        document.getElementById("loader-logo").src = "logo-parasite.png";
-        document.body.style.background = "linear-gradient(to right, #2a0845, #6441a5)";
-      } else if (exam === 'second_round') {
-        examType = 'second_round';
-        targetDate = new Date("2025/9/1 09:00:00").getTime();
-        document.getElementById("examTitle").innerText = "امتحان الدور الثاني";
-        document.getElementById("favicon").href = "god.png";
-        document.getElementById("loader-logo").src = "god.png";
-        document.body.style.background = "linear-gradient(to right, #ff4b5c, #ff8f87)"; // خلفية حمراء
-      }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+    updateExamDate();
+
+    function toggleMenu() {
+      const menuIcon = document.querySelector('.menu-icon');
+      menuIcon.classList.toggle('active');
+      document.getElementById('menu').classList.toggle('show-menu');
+    }
+
+    function switchExam() {
+      examType = 'god';
+      targetDate = new Date("2025/5/8 09:00:00").getTime();
+      document.getElementById("examTitle").innerText = "امتحان الدور الثاني";
+      document.querySelector("#menu a").innerText = "امتحان الدور الأول";
+      document.getElementById("favicon").href = "god.png";
+      document.getElementById("loader-logo").src = "god.png";
+      document.title = "امتحان الدور الثاني";
 
       document.getElementById("main-content").style.display = "none";
       document.getElementById("loader").style.display = "flex";
+      document.getElementById("menu").classList.remove("show-menu");
 
       setTimeout(() => {
         updateCountdown();
@@ -350,9 +347,12 @@
       }, 5000);
     }
 
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-    updateExamDate();
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("main-content").style.display = "flex";
+      }, 5000);
+    };
   </script>
 </body>
 </html>
