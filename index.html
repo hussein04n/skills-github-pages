@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>امتحان الدور الثاني</title>
-  <link id="favicon" rel="icon" type="image/png" href="logo-god.png">
+  <title>امتحان البكتريا الوزاري</title>
+  <link id="favicon" rel="icon" type="image/png" href="logo-bacteria.png">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
   <style>
     html, body {
@@ -12,7 +12,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Tajawal', sans-serif;
-      background: linear-gradient(to right, #c0392b, #e74c3c); /* الأحمر */
+      background: linear-gradient(to right, #2a0845, #6441a5);
       color: white;
       overflow: hidden;
     }
@@ -249,18 +249,21 @@
 
   <div id="loader">
     <div class="logo-wrapper">
-      <img id="loader-logo" src="god.png" alt="شعار الامتحان">
+      <img id="loader-logo" src="logo-bacteria.png" alt="شعار الامتحان">
     </div>
     <div id="loader-text">جارٍ التحميل...</div>
   </div>
 
   <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
   <div id="menu" class="menu">
-    <a href="#" onclick="switchExam()">امتحان الدور الثاني</a>
+    <a href="#" onclick="switchExam()">امتحان الطفيليات الوزاري</a>
+    <a href="#" onclick="switchSecondRoundExam()">امتحان الدور الثاني</a>
+    <a href="#" onclick="switchSecondRoundBacteria()">امتحان البكتريا في الدور الثاني</a>
+    <a href="#" onclick="switchSecondRoundParasites()">امتحان الطفيليات في الدور الثاني</a>
   </div>
 
   <div id="main-content">
-    <h1 id="examTitle">امتحان الدور الثاني</h1>
+    <h1 id="examTitle">امتحان البكتريا الوزاري</h1>
     <div id="examDate"></div> <!-- هنا يظهر تاريخ الامتحان -->
 
     <div id="timer">
@@ -284,8 +287,8 @@
   </div>
 
   <script>
-    let examType = 'god';
-    let targetDate = new Date("2025/5/8 09:00:00").getTime();
+    let examType = 'bacteria';
+    let targetDate = new Date("2025/9/1 09:00:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -318,7 +321,7 @@
 
     setInterval(updateCountdown, 1000);
     updateCountdown();
-    updateExamDate();
+    updateExamDate();  // تحديث تاريخ الامتحان
 
     function toggleMenu() {
       const menuIcon = document.querySelector('.menu-icon');
@@ -327,12 +330,46 @@
     }
 
     function switchExam() {
-      examType = 'god';
-      targetDate = new Date("2025/5/8 09:00:00").getTime();
+      if (examType === 'bacteria') {
+        examType = 'parasites';
+        targetDate = new Date("2025/9/1 09:00:00").getTime();
+        document.getElementById("examTitle").innerText = "امتحان الطفيليات الوزاري";
+        document.querySelector("#menu a").innerText = "امتحان البكتريا الوزاري";
+        document.getElementById("favicon").href = "logo-parasite.png";
+        document.getElementById("loader-logo").src = "logo-parasite.png";
+        document.getElementById("loader").style.background = "#9b59b6";
+        document.title = "امتحان الطفيليات الوزاري";
+      } else {
+        examType = 'bacteria';
+        targetDate = new Date("2025/9/1 09:00:00").getTime();
+        document.getElementById("examTitle").innerText = "امتحان البكتريا الوزاري";
+        document.querySelector("#menu a").innerText = "امتحان الطفيليات الوزاري";
+        document.getElementById("favicon").href = "logo-bacteria.png";
+        document.getElementById("loader-logo").src = "logo-bacteria.png";
+        document.getElementById("loader").style.background = "#2a0845";
+        document.title = "امتحان البكتريا الوزاري";
+      }
+
+      document.getElementById("main-content").style.display = "none";
+      document.getElementById("loader").style.display = "flex";
+      document.getElementById("menu").classList.remove("show-menu");
+
+      setTimeout(() => {
+        updateCountdown();
+        updateExamDate();  // تحديث تاريخ الامتحان عند التبديل
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("main-content").style.display = "flex";
+      }, 5000);
+    }
+
+    function switchSecondRoundExam() {
+      examType = 'second-round';
+      targetDate = new Date("2025/9/1 09:00:00").getTime();
       document.getElementById("examTitle").innerText = "امتحان الدور الثاني";
-      document.querySelector("#menu a").innerText = "امتحان الدور الأول";
+      document.querySelector("#menu a").innerText = "امتحان البكتريا الوزاري";
       document.getElementById("favicon").href = "god.png";
       document.getElementById("loader-logo").src = "god.png";
+      document.getElementById("loader").style.background = "red";
       document.title = "امتحان الدور الثاني";
 
       document.getElementById("main-content").style.display = "none";
@@ -341,18 +378,11 @@
 
       setTimeout(() => {
         updateCountdown();
-        updateExamDate();
+        updateExamDate();  // تحديث تاريخ الامتحان عند التبديل
         document.getElementById("loader").style.display = "none";
         document.getElementById("main-content").style.display = "flex";
       }, 5000);
     }
-
-    window.onload = () => {
-      setTimeout(() => {
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("main-content").style.display = "flex";
-      }, 5000);
-    };
   </script>
 </body>
 </html>
