@@ -256,12 +256,13 @@
 
   <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
   <div id="menu" class="menu">
-    <a href="#" onclick="switchExam()">امتحان الطفيليات الوزاري</a>
+    <a href="#" onclick="switchExam('parasites')">امتحان الطفيليات الوزاري</a>
+    <a href="#" onclick="switchExam('second_round')">امتحان الدور الثاني</a>
   </div>
 
   <div id="main-content">
     <h1 id="examTitle">امتحان البكتريا الوزاري</h1>
-    <div id="examDate"></div> <!-- هنا يظهر تاريخ الامتحان -->
+    <div id="examDate"></div>
 
     <div id="timer">
       <div class="time-box day">
@@ -318,7 +319,7 @@
 
     setInterval(updateCountdown, 1000);
     updateCountdown();
-    updateExamDate();  // تحديث تاريخ الامتحان
+    updateExamDate();
 
     function toggleMenu() {
       const menuIcon = document.querySelector('.menu-icon');
@@ -326,16 +327,8 @@
       document.getElementById('menu').classList.toggle('show-menu');
     }
 
-    function switchExam() {
-      if (examType === 'bacteria') {
-        examType = 'parasites';
-        targetDate = new Date("2025/5/8 09:00:00").getTime();
-        document.getElementById("examTitle").innerText = "امتحان الطفيليات الوزاري";
-        document.querySelector("#menu a").innerText = "امتحان البكتريا الوزاري";
-        document.getElementById("favicon").href = "logo-parasite.png";
-        document.getElementById("loader-logo").src = "logo-parasite.png";
-        document.title = "امتحان الطفيليات الوزاري";
-      } else {
+    function switchExam(exam) {
+      if (exam === 'bacteria') {
         examType = 'bacteria';
         targetDate = new Date("2025/5/4 09:00:00").getTime();
         document.getElementById("examTitle").innerText = "امتحان البكتريا الوزاري";
@@ -343,6 +336,25 @@
         document.getElementById("favicon").href = "logo-bacteria.png";
         document.getElementById("loader-logo").src = "logo-bacteria.png";
         document.title = "امتحان البكتريا الوزاري";
+        document.body.style.background = "linear-gradient(to right, #2a0845, #6441a5)"; 
+      } else if (exam === 'parasites') {
+        examType = 'parasites';
+        targetDate = new Date("2025/5/8 09:00:00").getTime();
+        document.getElementById("examTitle").innerText = "امتحان الطفيليات الوزاري";
+        document.querySelector("#menu a").innerText = "امتحان البكتريا الوزاري";
+        document.getElementById("favicon").href = "logo-parasite.png";
+        document.getElementById("loader-logo").src = "logo-parasite.png";
+        document.title = "امتحان الطفيليات الوزاري";
+        document.body.style.background = "linear-gradient(to right, #2a0845, #6441a5)"; 
+      } else if (exam === 'second_round') {
+        examType = 'second_round';
+        targetDate = new Date("2025/9/1 09:00:00").getTime();
+        document.getElementById("examTitle").innerText = "امتحان الدور الثاني";
+        document.querySelector("#menu a").innerText = "امتحان الطفيليات الوزاري";
+        document.getElementById("favicon").href = "god.png";
+        document.getElementById("loader-logo").src = "god.png";
+        document.title = "امتحان الدور الثاني";
+        document.body.style.background = "linear-gradient(to right, #ff4b5c, #ff8f87)"; // خلفية حمراء
       }
 
       document.getElementById("main-content").style.display = "none";
@@ -351,18 +363,11 @@
 
       setTimeout(() => {
         updateCountdown();
-        updateExamDate();  // تحديث تاريخ الامتحان عند التبديل
+        updateExamDate();
         document.getElementById("loader").style.display = "none";
         document.getElementById("main-content").style.display = "flex";
       }, 5000);
     }
-
-    window.onload = () => {
-      setTimeout(() => {
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("main-content").style.display = "flex";
-      }, 5000);
-    };
   </script>
 </body>
 </html>
