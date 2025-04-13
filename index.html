@@ -1,322 +1,196 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>امتحان البكتريا الوزاري</title>
-  <link id="favicon" rel="icon" type="image/png" href="logo-bacteria.png">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>عداد الامتحانات</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    html, body {
-      height: 100%;
+    * {
       margin: 0;
       padding: 0;
-      font-family: 'Tajawal', sans-serif;
-      background: linear-gradient(to right, #2a0845, #6441a5);
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #2e004f, #602080);
       color: white;
-      overflow: hidden;
+      text-align: center;
+      padding: 20px;
     }
 
-    .bg-smoke {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: -1;
-      filter: blur(80px);
-      animation: moveSmoke 40s ease-in-out infinite alternate, glowPulse 4s ease-in-out infinite;
-      opacity: 0.4;
-    }
-
-    @keyframes moveSmoke {
-      0% { transform: translate(0%, 0%) scale(1.2); }
-      50% { transform: translate(-10%, -10%) scale(1.3); }
-      100% { transform: translate(0%, 0%) scale(1.2); }
-    }
-
-    @keyframes glowPulse {
-      0% { box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.3); }
-      100% { box-shadow: 0 0 30px 20px rgba(255, 255, 255, 0.6); }
-    }
-
-    .menu-icon {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      font-size: 30px;
-      cursor: pointer;
-      z-index: 10;
-      transition: transform 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .menu-icon:active {
-      transform: scale(1.2) rotate(45deg);
-      color: #9b59b6;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-    }
-
-    .menu {
-      display: none;
-      position: absolute;
-      top: 50px;
-      right: 10px;
-      background-color: #444;
-      border-radius: 10px;
-      padding: 10px;
-      text-align: right;
-      z-index: 10;
-    }
-
-    .menu a {
-      color: white;
-      padding: 8px;
-      text-decoration: none;
-      display: block;
-    }
-
-    .menu a:hover {
-      background-color: #666;
-    }
-
-    .show-menu {
-      display: block;
-    }
-
-    #main-content {
-      display: none;
-      height: 100vh;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      z-index: 1;
+    .logo {
+      width: 100px;
+      margin: 30px auto 20px;
     }
 
     h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #e0d7ff;
-      text-shadow: 0 0 10px #b084f5;
-      animation: pulse 3s infinite ease-in-out;
+      margin-bottom: 10px;
+      font-size: 28px;
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.05); opacity: 0.8; }
+    p {
+      margin-bottom: 40px;
+      font-size: 18px;
     }
 
-    #examDate {
-      font-size: 16px;
-      margin-bottom: 20px;
-      color: #e0d7ff;
-      text-align: center;
-      text-shadow: 0 0 5px #b084f5;
-    }
-
-    #timer {
+    .countdown {
       display: flex;
       justify-content: center;
-      gap: 8px;
-      padding: 8px;
+      gap: 15px;
+      flex-wrap: wrap;
     }
 
     .time-box {
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 12px;
-      width: 80px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease;
+      padding: 15px 20px;
+      border-radius: 12px;
+      font-size: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
-    .time-box:hover {
-      transform: translateY(-5px);
-    }
-
-    .number {
-      font-size: 22px;
-      font-weight: bold;
-      color: #e0d7ff;
-    }
-
-    .label {
-      font-size: 12px;
-      margin-top: 5px;
-      font-weight: bold;
-    }
-
-    footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #ddd;
-      text-align: center;
-    }
-
-    #loader {
+    .menu {
       position: fixed;
-      inset: 0;
-      background: #2a0845;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .logo-wrapper {
-      width: 120px;
-      height: 120px;
-      border: 5px solid #9b59b6;
-      border-radius: 50%;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
       overflow: hidden;
-      position: relative;
-      z-index: 5;
+      z-index: 100;
     }
 
-    #loader-logo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      bottom: 0;
-      clip-path: inset(100% 0 0 0);
-      animation: revealLogo 5s forwards;
-    }
-
-    @keyframes revealLogo {
-      0% { clip-path: inset(100% 0 0 0); }
-      100% { clip-path: inset(0% 0 0 0); }
-    }
-
-    #loader-text {
-      font-size: 16px;
+    .menu button {
+      background: transparent;
       color: white;
-      animation: pulse 2s infinite ease-in-out;
+      border: none;
+      padding: 10px 15px;
+      display: block;
+      width: 100%;
+      text-align: right;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .menu button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .loading img {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    .loading p {
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
-  <div class="bg-smoke"></div>
 
-  <div id="loader">
-    <div class="logo-wrapper">
-      <img id="loader-logo" src="logo-bacteria.png" alt="شعار الامتحان">
-    </div>
-    <div id="loader-text">جارٍ التحميل...</div>
+  <div class="menu">
+    <button onclick="showSection('bacteriaTheory')">نظري البكتيريا</button>
+    <button onclick="showSection('bacteriaPractical')">عملي البكتيريا</button>
+    <button onclick="showSection('parasiteTheory')">نظري الطفيليات</button>
+    <button onclick="showSection('parasitePractical')">عملي الطفيليات</button>
   </div>
 
-  <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-  <div id="menu" class="menu">
-    <a href="#" onclick="switchExam('bacteria_theory')">بكتريا نظري</a>
-    <a href="#" onclick="switchExam('bacteria_practical')">بكتريا عملي</a>
-    <a href="#" onclick="switchExam('parasite_theory')">طفيليات نظري</a>
-    <a href="#" onclick="switchExam('parasite_practical')">طفيليات عملي</a>
-  </div>
+  <!-- أقسام العداد -->
+  <div id="bacteriaTheory" class="section active" data-date="2025-04-20T09:00:00" data-title="امتحان البكتيريا النظري" data-img="bacteria.png"></div>
+  <div id="bacteriaPractical" class="section" data-date="2025-04-23T09:00:00" data-title="امتحان البكتيريا العملي" data-img="bacteria.png"></div>
+  <div id="parasiteTheory" class="section" data-date="2025-04-21T09:00:00" data-title="امتحان الطفيليات النظري" data-img="parasites.png"></div>
+  <div id="parasitePractical" class="section" data-date="2025-04-24T09:00:00" data-title="امتحان الطفيليات العملي" data-img="parasites.png"></div>
 
-  <div id="main-content">
-    <h1 id="examTitle">امتحان البكتريا الوزاري</h1>
-    <div id="examDate"></div>
-
-    <div id="timer">
-      <div class="time-box day"><div class="number" id="days">--</div><div class="label">يوم</div></div>
-      <div class="time-box hour"><div class="number" id="hours">--</div><div class="label">ساعة</div></div>
-      <div class="time-box minute"><div class="number" id="minutes">--</div><div class="label">دقيقة</div></div>
-      <div class="time-box second"><div class="number" id="seconds">--</div><div class="label">ثانية</div></div>
-    </div>
+  <!-- شاشة التحميل -->
+  <div class="loading" id="loading">
+    <img src="" id="loadingImg" alt="loading" />
+    <p>جارِ التحميل...</p>
   </div>
 
   <script>
-    let examType = 'bacteria_theory';
-    const examData = {
-      bacteria_theory: {
-        title: "امتحان البكتريا النظري",
-        date: "2025/5/4 09:00:00",
-        logo: "logo-bacteria.png"
-      },
-      bacteria_practical: {
-        title: "امتحان البكتريا العملي",
-        date: "2025/4/23 09:00:00",
-        logo: "bacteria.png"
-      },
-      parasite_theory: {
-        title: "امتحان الطفيليات النظري",
-        date: "2025/5/8 09:00:00",
-        logo: "logo-parasite.png"
-      },
-      parasite_practical: {
-        title: "امتحان الطفيليات العملي",
-        date: "2025/4/21 09:00:00",
-        logo: "parasites.png"
-      }
-    };
+    let activeSection = null;
 
-    let targetDate = new Date(examData[examType].date).getTime();
+    function showSection(id) {
+      if (activeSection) activeSection.classList.remove("active");
+      const section = document.getElementById(id);
+      activeSection = section;
+      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+      document.getElementById('loading').style.display = 'block';
 
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const diff = targetDate - now;
-      if (diff <= 0) {
-        document.getElementById("timer").innerHTML = "<h2>حان وقت الامتحان!</h2>";
-        return;
-      }
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      document.getElementById("days").innerText = days;
-      document.getElementById("hours").innerText = hours;
-      document.getElementById("minutes").innerText = minutes;
-      document.getElementById("seconds").innerText = seconds;
-    }
+      const logo = section.getAttribute('data-img');
+      document.getElementById('loadingImg').src = logo;
 
-    function updateExamDate() {
-      const examDate = new Date(targetDate);
-      const formatted = `${examDate.getFullYear()}/${examDate.getMonth() + 1}/${examDate.getDate()}`;
-      const daysOfWeek = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-      const dayName = daysOfWeek[examDate.getDay()];
-      document.getElementById("examDate").innerText = `يوم ${dayName}، ${formatted} الساعة 9 صباحًا`;
-    }
-
-    function switchExam(type) {
-      examType = type;
-      const exam = examData[type];
-      targetDate = new Date(exam.date).getTime();
-      document.getElementById("examTitle").innerText = exam.title;
-      document.getElementById("favicon").href = exam.logo;
-      document.getElementById("loader-logo").src = exam.logo;
-      document.title = exam.title;
-      document.getElementById("main-content").style.display = "none";
-      document.getElementById("loader").style.display = "flex";
-      document.getElementById("menu").classList.remove("show-menu");
       setTimeout(() => {
-        updateCountdown();
-        updateExamDate();
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("main-content").style.display = "flex";
-      }, 5000);
+        document.getElementById('loading').style.display = 'none';
+        section.style.display = 'block';
+        section.classList.add("active");
+        startCountdown(section);
+      }, 1000);
     }
 
-    function toggleMenu() {
-      document.getElementById('menu').classList.toggle('show-menu');
+    function startCountdown(section) {
+      section.innerHTML = '';
+
+      const title = section.getAttribute('data-title');
+      const date = new Date(section.getAttribute('data-date'));
+
+      const logo = document.createElement("img");
+      logo.src = section.getAttribute('data-img');
+      logo.className = "logo";
+
+      const h1 = document.createElement("h1");
+      h1.textContent = title;
+
+      const dateText = document.createElement("p");
+      const days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+      dateText.textContent = `يوم ${days[date.getDay()]}، ${date.toLocaleDateString('ar-EG')} الساعة 9 صباحاً`;
+
+      const countdownDiv = document.createElement("div");
+      countdownDiv.className = "countdown";
+
+      const timeUnits = ['يوم','ساعة','دقيقة','ثانية'];
+      const timeBoxes = timeUnits.map(label => {
+        const box = document.createElement("div");
+        box.className = "time-box";
+        box.innerHTML = `<span class="num">0</span><br>${label}`;
+        countdownDiv.appendChild(box);
+        return box.querySelector(".num");
+      });
+
+      section.appendChild(logo);
+      section.appendChild(h1);
+      section.appendChild(dateText);
+      section.appendChild(countdownDiv);
+
+      clearInterval(section.timer);
+      section.timer = setInterval(() => {
+        const now = new Date();
+        const diff = Math.max(0, date - now);
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        [d, h, m, s].forEach((val, i) => timeBoxes[i].textContent = val);
+      }, 1000);
     }
 
     window.onload = () => {
-      setTimeout(() => {
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("main-content").style.display = "flex";
-        updateCountdown();
-        updateExamDate();
-      }, 5000);
+      startCountdown(document.querySelector('.section.active'));
     };
-
-    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
