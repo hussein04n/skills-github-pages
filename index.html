@@ -1,368 +1,181 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>امتحان البكتريا الوزاري</title>
-  <link id="favicon" rel="icon" type="image/png" href="logo-bacteria.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عداد الامتحانات</title>
+  <link id="favicon" rel="icon" type="image/png" href="bacteria.png">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    html, body {
-      height: 100%;
+    body {
       margin: 0;
-      padding: 0;
       font-family: 'Tajawal', sans-serif;
       background: linear-gradient(to right, #2a0845, #6441a5);
       color: white;
-      overflow: hidden;
-    }
-
-    .bg-smoke {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: -1;
-      filter: blur(80px);
-      animation: moveSmoke 40s ease-in-out infinite alternate, glowPulse 4s ease-in-out infinite;
-      opacity: 0.4;
-    }
-
-    @keyframes moveSmoke {
-      0% { transform: translate(0%, 0%) scale(1.2); }
-      50% { transform: translate(-10%, -10%) scale(1.3); }
-      100% { transform: translate(0%, 0%) scale(1.2); }
-    }
-
-    @keyframes glowPulse {
-      0% { box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.3); }
-      100% { box-shadow: 0 0 30px 20px rgba(255, 255, 255, 0.6); }
-    }
-
-    .menu-icon {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      font-size: 30px;
-      cursor: pointer;
-      z-index: 10;
-      transition: transform 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .menu-icon:active {
-      transform: scale(1.2) rotate(45deg);
-      color: #9b59b6;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      text-align: center;
     }
 
     .menu {
-      display: none;
-      position: absolute;
-      top: 50px;
-      right: 10px;
-      background-color: #444;
-      border-radius: 10px;
-      padding: 10px;
-      text-align: right;
-      z-index: 10;
-    }
-
-    .menu a {
-      color: white;
-      padding: 8px;
-      text-decoration: none;
-      display: block;
-    }
-
-    .menu a:hover {
-      background-color: #666;
-    }
-
-    .show-menu {
-      display: block;
-    }
-
-    #main-content {
-      display: none;
-      height: 100vh;
-      width: 100%;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      position: relative;
-      z-index: 1;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 15px;
+      background-color: rgba(0,0,0,0.2);
+    }
+
+    .menu button {
+      background-color: #6c3ec1;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .menu button:hover {
+      background-color: #8a5be4;
+    }
+
+    .timer-section {
+      display: none;
+      margin-top: 40px;
     }
 
     h1 {
       font-size: 24px;
-      margin-bottom: 20px;
-      color: #e0d7ff;
-      text-shadow: 0 0 10px #b084f5;
-      animation: pulse 3s infinite ease-in-out;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.05); opacity: 0.8; }
-    }
-
-    #examDate {
-      font-size: 16px;
-      margin-bottom: 20px;
-      color: #e0d7ff;
-      text-align: center;
-      text-shadow: 0 0 5px #b084f5;
+      margin-bottom: 10px;
     }
 
     #timer {
       display: flex;
       justify-content: center;
-      flex-wrap: nowrap;
-      gap: 8px;
-      padding: 8px;
-      flex-direction: row;
+      gap: 10px;
     }
 
     .time-box {
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 12px;
-      width: 80px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease;
-    }
-
-    .time-box:hover {
-      transform: translateY(-5px);
+      border-radius: 10px;
+      padding: 10px;
+      width: 70px;
     }
 
     .number {
       font-size: 22px;
       font-weight: bold;
-      color: #e0d7ff;
     }
 
     .label {
       font-size: 12px;
       margin-top: 5px;
-      font-weight: bold;
     }
 
-    .day .label { color: #e0d7ff; }
-    .hour .label { color: #e0d7ff; }
-    .minute .label { color: #e0d7ff; }
-    .second .label { color: #e0d7ff; }
-
-    footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #ddd;
-      text-align: center;
-    }
-
-    #loader {
-      position: fixed;
-      inset: 0;
-      background: #2a0845;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .logo-wrapper {
-      width: 120px;
-      height: 120px;
-      border: 5px solid #9b59b6;
-      border-radius: 50%;
-      overflow: hidden;
-      position: relative;
-      z-index: 5;
-    }
-
-    #loader-logo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      bottom: 0;
-      clip-path: inset(100% 0 0 0);
-      animation: revealLogo 5s forwards;
-    }
-
-    @keyframes revealLogo {
-      0% { clip-path: inset(100% 0 0 0); }
-      100% { clip-path: inset(0% 0 0 0); }
-    }
-
-    #loader-text {
-      font-size: 16px;
-      color: white;
-      animation: pulse 2s infinite ease-in-out;
-    }
-
-    @media (max-width: 768px) {
-      .menu-icon {
-        font-size: 22px;
-        top: 8px;
-        right: 8px;
-      }
-
-      #main-content {
-        padding: 8px;
-      }
-
-      h1 {
-        font-size: 20px;
-        margin-bottom: 15px;
-      }
-
-      .time-box {
-        width: 60px;
-        padding: 8px;
-      }
-
-      .number {
-        font-size: 20px;
-      }
-
-      .label {
-        font-size: 10px;
-      }
-
-      footer {
-        font-size: 10px;
-        margin-top: 15px;
-      }
+    img.logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 15px;
     }
   </style>
 </head>
 <body>
-  <div class="bg-smoke"></div>
 
-  <div id="loader">
-    <div class="logo-wrapper">
-      <img id="loader-logo" src="logo-bacteria.png" alt="شعار الامتحان">
-    </div>
-    <div id="loader-text">جارٍ التحميل...</div>
+  <div class="menu">
+    <button onclick="showTimer('bacteria-theory')">بكتريا - نظري</button>
+    <button onclick="showTimer('bacteria-practical')">بكتريا - عملي</button>
+    <button onclick="showTimer('parasite-theory')">طفيليات - نظري</button>
+    <button onclick="showTimer('parasite-practical')">طفيليات - عملي</button>
   </div>
 
-  <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-  <div id="menu" class="menu">
-    <a href="#" onclick="switchExam()">امتحان الطفيليات الوزاري</a>
+  <div id="bacteria-theory" class="timer-section">
+    <img src="bacteria.png" class="logo" alt="بكتريا">
+    <h1>امتحان البكتريا - نظري</h1>
+    <div id="examDate-bacteria-theory"></div>
+    <div id="timer-bacteria-theory" class="timer"></div>
   </div>
 
-  <div id="main-content">
-    <h1 id="examTitle">امتحان البكتريا الوزاري</h1>
-    <div id="examDate"></div> <!-- هنا يظهر تاريخ الامتحان -->
+  <div id="bacteria-practical" class="timer-section">
+    <img src="bacteria.png" class="logo" alt="بكتريا">
+    <h1>امتحان البكتريا - عملي</h1>
+    <div id="examDate-bacteria-practical"></div>
+    <div id="timer-bacteria-practical" class="timer"></div>
+  </div>
 
-    <div id="timer">
-      <div class="time-box day">
-        <div class="number" id="days">--</div>
-        <div class="label">يوم</div>
-      </div>
-      <div class="time-box hour">
-        <div class="number" id="hours">--</div>
-        <div class="label">ساعة</div>
-      </div>
-      <div class="time-box minute">
-        <div class="number" id="minutes">--</div>
-        <div class="label">دقيقة</div>
-      </div>
-      <div class="time-box second">
-        <div class="number" id="seconds">--</div>
-        <div class="label">ثانية</div>
-      </div>
-    </div>
+  <div id="parasite-theory" class="timer-section">
+    <img src="parasites.png" class="logo" alt="طفيليات">
+    <h1>امتحان الطفيليات - نظري</h1>
+    <div id="examDate-parasite-theory"></div>
+    <div id="timer-parasite-theory" class="timer"></div>
+  </div>
+
+  <div id="parasite-practical" class="timer-section">
+    <img src="parasites.png" class="logo" alt="طفيليات">
+    <h1>امتحان الطفيليات - عملي</h1>
+    <div id="examDate-parasite-practical"></div>
+    <div id="timer-parasite-practical" class="timer"></div>
   </div>
 
   <script>
-    let examType = 'bacteria';
-    let targetDate = new Date("2025/5/4 09:00:00").getTime();
+    const exams = {
+      "bacteria-theory": new Date("2025-04-23T09:00:00"),
+      "bacteria-practical": new Date("2025-04-23T09:00:00"),
+      "parasite-theory": new Date("2025-04-21T09:00:00"),
+      "parasite-practical": new Date("2025-04-21T09:00:00")
+    };
 
-    function updateCountdown() {
+    function updateCountdown(id) {
       const now = new Date().getTime();
-      const diff = targetDate - now;
-
-      if (diff <= 0) {
-        document.getElementById("timer").innerHTML = "<h2>حان وقت الامتحان!</h2>";
-        return;
-      }
-
+      const target = exams[id].getTime();
+      const diff = target - now;
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-      document.getElementById("days").innerText = days;
-      document.getElementById("hours").innerText = hours;
-      document.getElementById("minutes").innerText = minutes;
-      document.getElementById("seconds").innerText = seconds;
-    }
-
-    function updateExamDate() {
-      const examDate = new Date(targetDate);
-      const dateFormatted = `${examDate.getFullYear()}/${examDate.getMonth() + 1}/${examDate.getDate()}`;
-      const daysOfWeek = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-      const dayOfWeek = daysOfWeek[examDate.getDay()];
-
-      document.getElementById("examDate").innerText = `يوم ${dayOfWeek}، ${dateFormatted} الساعة 9 صباحًا`;
-    }
-
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-    updateExamDate();  // تحديث تاريخ الامتحان
-
-    function toggleMenu() {
-      const menuIcon = document.querySelector('.menu-icon');
-      menuIcon.classList.toggle('active');
-      document.getElementById('menu').classList.toggle('show-menu');
-    }
-
-    function switchExam() {
-      if (examType === 'bacteria') {
-        examType = 'parasites';
-        targetDate = new Date("2025/5/8 09:00:00").getTime();
-        document.getElementById("examTitle").innerText = "امتحان الطفيليات الوزاري";
-        document.querySelector("#menu a").innerText = "امتحان البكتريا الوزاري";
-        document.getElementById("favicon").href = "logo-parasite.png";
-        document.getElementById("loader-logo").src = "logo-parasite.png";
-        document.title = "امتحان الطفيليات الوزاري";
-      } else {
-        examType = 'bacteria';
-        targetDate = new Date("2025/5/4 09:00:00").getTime();
-        document.getElementById("examTitle").innerText = "امتحان البكتريا الوزاري";
-        document.querySelector("#menu a").innerText = "امتحان الطفيليات الوزاري";
-        document.getElementById("favicon").href = "logo-bacteria.png";
-        document.getElementById("loader-logo").src = "logo-bacteria.png";
-        document.title = "امتحان البكتريا الوزاري";
+      const timer = document.getElementById("timer-" + id);
+      if (diff <= 0) {
+        timer.innerHTML = "<h2>حان وقت الامتحان!</h2>";
+        return;
       }
 
-      document.getElementById("main-content").style.display = "none";
-      document.getElementById("loader").style.display = "flex";
-      document.getElementById("menu").classList.remove("show-menu");
-
-      setTimeout(() => {
-        updateCountdown();
-        updateExamDate();  // تحديث تاريخ الامتحان عند التبديل
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("main-content").style.display = "flex";
-      }, 5000);
+      timer.innerHTML = `
+        <div id="timer">
+          <div class="time-box"><div class="number">${days}</div><div class="label">يوم</div></div>
+          <div class="time-box"><div class="number">${hours}</div><div class="label">ساعة</div></div>
+          <div class="time-box"><div class="number">${minutes}</div><div class="label">دقيقة</div></div>
+          <div class="time-box"><div class="number">${seconds}</div><div class="label">ثانية</div></div>
+        </div>
+      `;
     }
 
-    window.onload = () => {
-      setTimeout(() => {
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("main-content").style.display = "flex";
-      }, 5000);
-    };
+    function updateDateText(id) {
+      const date = exams[id];
+      const daysOfWeek = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+      const dayName = daysOfWeek[date.getDay()];
+      const formatted = `${dayName}، ${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} - الساعة 9 صباحًا`;
+      document.getElementById("examDate-" + id).innerText = formatted;
+    }
+
+    function showTimer(id) {
+      document.querySelectorAll('.timer-section').forEach(el => el.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+
+    // بدء العدادات
+    setInterval(() => {
+      for (const id in exams) {
+        updateCountdown(id);
+      }
+    }, 1000);
+
+    // تحديث التواريخ
+    for (const id in exams) {
+      updateDateText(id);
+    }
+
+    // عرض أول عداد افتراضياً
+    showTimer('bacteria-theory');
   </script>
+
 </body>
 </html>
