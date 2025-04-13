@@ -1,196 +1,139 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>عداد الامتحانات</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Cairo', sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبارات البكتيريا والطفيليات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            background-color: white;
+            color: black;
+        }
 
-    body {
-      background: linear-gradient(to bottom right, #2e004f, #602080);
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
+        .dark-mode {
+            background-color: #333;
+            color: white;
+        }
 
-    .logo {
-      width: 100px;
-      margin: 30px auto 20px;
-    }
+        .exam-section {
+            margin-bottom: 20px;
+        }
 
-    h1 {
-      margin-bottom: 10px;
-      font-size: 28px;
-    }
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
 
-    p {
-      margin-bottom: 40px;
-      font-size: 18px;
-    }
+        .countdown {
+            color: red;
+        }
 
-    .countdown {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
+        .button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
 
-    .time-box {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px 20px;
-      border-radius: 12px;
-      font-size: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
+        .button:hover {
+            background-color: #45a049;
+        }
 
-    .menu {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
-      z-index: 100;
-    }
+        .switch-mode {
+            background-color: #008CBA;
+        }
 
-    .menu button {
-      background: transparent;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      display: block;
-      width: 100%;
-      text-align: right;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
+        .switch-mode:hover {
+            background-color: #007bb5;
+        }
 
-    .menu button:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
+        .alert {
+            background-color: #f44336;
+            color: white;
+            padding: 10px;
+            margin-top: 20px;
+            display: none;
+        }
 
-    .section {
-      display: none;
-    }
-
-    .section.active {
-      display: block;
-    }
-
-    .loading {
-      display: none;
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    .loading img {
-      width: 100px;
-      margin-bottom: 20px;
-    }
-
-    .loading p {
-      font-size: 18px;
-    }
-  </style>
+        .alert.show {
+            display: block;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="menu">
-    <button onclick="showSection('bacteriaTheory')">نظري البكتيريا</button>
-    <button onclick="showSection('bacteriaPractical')">عملي البكتيريا</button>
-    <button onclick="showSection('parasiteTheory')">نظري الطفيليات</button>
-    <button onclick="showSection('parasitePractical')">عملي الطفيليات</button>
-  </div>
+    <h1>اختبارات البكتيريا والطفيليات</h1>
 
-  <!-- أقسام العداد -->
-  <div id="bacteriaTheory" class="section active" data-date="2025-04-20T09:00:00" data-title="امتحان البكتيريا النظري" data-img="bacteria.png"></div>
-  <div id="bacteriaPractical" class="section" data-date="2025-04-23T09:00:00" data-title="امتحان البكتيريا العملي" data-img="bacteria.png"></div>
-  <div id="parasiteTheory" class="section" data-date="2025-04-21T09:00:00" data-title="امتحان الطفيليات النظري" data-img="parasites.png"></div>
-  <div id="parasitePractical" class="section" data-date="2025-04-24T09:00:00" data-title="امتحان الطفيليات العملي" data-img="parasites.png"></div>
+    <!-- زر تغيير الوضع بين الليلي والفاتح -->
+    <button class="button switch-mode" onclick="toggleMode()">تغيير الوضع</button>
 
-  <!-- شاشة التحميل -->
-  <div class="loading" id="loading">
-    <img src="" id="loadingImg" alt="loading" />
-    <p>جارِ التحميل...</p>
-  </div>
+    <!-- تنبيه العد التنازلي -->
+    <div class="alert" id="alertMessage">انتهى الوقت!</div>
 
-  <script>
-    let activeSection = null;
+    <!-- قسم اختبارات البكتيريا -->
+    <div class="exam-section" id="bacteriaSection">
+        <h2>اختبار البكتيريا - نظري</h2>
+        <div class="timer" id="bacteriaTheoryTimer">الوقت المتبقي: 00:10:00</div>
+        <button class="button" onclick="startTimer('bacteriaTheory')">ابدأ الاختبار النظري</button>
 
-    function showSection(id) {
-      if (activeSection) activeSection.classList.remove("active");
-      const section = document.getElementById(id);
-      activeSection = section;
-      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
-      document.getElementById('loading').style.display = 'block';
+        <h2>اختبار البكتيريا - عملي</h2>
+        <div class="timer" id="bacteriaPracticalTimer">الوقت المتبقي: 00:10:00</div>
+        <button class="button" onclick="startTimer('bacteriaPractical')">ابدأ الاختبار العملي</button>
+    </div>
 
-      const logo = section.getAttribute('data-img');
-      document.getElementById('loadingImg').src = logo;
+    <!-- قسم اختبارات الطفيليات -->
+    <div class="exam-section" id="parasitesSection">
+        <h2>اختبار الطفيليات - نظري</h2>
+        <div class="timer" id="parasitesTheoryTimer">الوقت المتبقي: 00:10:00</div>
+        <button class="button" onclick="startTimer('parasitesTheory')">ابدأ الاختبار النظري</button>
 
-      setTimeout(() => {
-        document.getElementById('loading').style.display = 'none';
-        section.style.display = 'block';
-        section.classList.add("active");
-        startCountdown(section);
-      }, 1000);
-    }
+        <h2>اختبار الطفيليات - عملي</h2>
+        <div class="timer" id="parasitesPracticalTimer">الوقت المتبقي: 00:10:00</div>
+        <button class="button" onclick="startTimer('parasitesPractical')">ابدأ الاختبار العملي</button>
+    </div>
 
-    function startCountdown(section) {
-      section.innerHTML = '';
+    <script>
+        let timers = {
+            bacteriaTheory: 600,
+            bacteriaPractical: 600,
+            parasitesTheory: 600,
+            parasitesPractical: 600
+        };
 
-      const title = section.getAttribute('data-title');
-      const date = new Date(section.getAttribute('data-date'));
+        let intervals = {};
 
-      const logo = document.createElement("img");
-      logo.src = section.getAttribute('data-img');
-      logo.className = "logo";
+        function startTimer(exam) {
+            const timerElement = document.getElementById(exam + 'Timer');
+            const countdownElement = document.getElementById('alertMessage');
+            if (intervals[exam]) {
+                clearInterval(intervals[exam]);
+            }
+            intervals[exam] = setInterval(() => {
+                timers[exam]--;
+                const minutes = Math.floor(timers[exam] / 60);
+                const seconds = timers[exam] % 60;
+                timerElement.innerHTML = `الوقت المتبقي: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
-      const h1 = document.createElement("h1");
-      h1.textContent = title;
+                if (timers[exam] <= 0) {
+                    clearInterval(intervals[exam]);
+                    countdownElement.classList.add('show');
+                    setTimeout(() => {
+                        countdownElement.classList.remove('show');
+                    }, 3000);
+                }
+            }, 1000);
+        }
 
-      const dateText = document.createElement("p");
-      const days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-      dateText.textContent = `يوم ${days[date.getDay()]}، ${date.toLocaleDateString('ar-EG')} الساعة 9 صباحاً`;
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
 
-      const countdownDiv = document.createElement("div");
-      countdownDiv.className = "countdown";
-
-      const timeUnits = ['يوم','ساعة','دقيقة','ثانية'];
-      const timeBoxes = timeUnits.map(label => {
-        const box = document.createElement("div");
-        box.className = "time-box";
-        box.innerHTML = `<span class="num">0</span><br>${label}`;
-        countdownDiv.appendChild(box);
-        return box.querySelector(".num");
-      });
-
-      section.appendChild(logo);
-      section.appendChild(h1);
-      section.appendChild(dateText);
-      section.appendChild(countdownDiv);
-
-      clearInterval(section.timer);
-      section.timer = setInterval(() => {
-        const now = new Date();
-        const diff = Math.max(0, date - now);
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const m = Math.floor((diff / (1000 * 60)) % 60);
-        const s = Math.floor((diff / 1000) % 60);
-        [d, h, m, s].forEach((val, i) => timeBoxes[i].textContent = val);
-      }, 1000);
-    }
-
-    window.onload = () => {
-      startCountdown(document.querySelector('.section.active'));
-    };
-  </script>
 </body>
 </html>
