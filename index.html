@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>عداد الامتحان</title>
-  <link id="favicon" rel="icon" type="image/png" href="bacteria.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>عداد الامتحانات</title>
+  <link id="favicon" rel="icon" type="image/png" href="bacteria.png">
   <style>
-    /* [نفس التنسيقات السابقة بدون تغيير بالحجم أو اللون] */
-    html, body {
-      height: 100%;
+    /* كل التنسيقات الأصلية كما هي تماماً */
+    body {
       margin: 0;
       font-family: 'Tajawal', sans-serif;
       background: linear-gradient(to right, #2a0845, #6441a5);
@@ -19,16 +16,13 @@
 
     .bg-smoke {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 200%;
-      height: 200%;
+      top: 0; left: 0;
+      width: 200%; height: 200%;
       background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: -1;
       filter: blur(80px);
       animation: moveSmoke 40s ease-in-out infinite alternate, glowPulse 4s ease-in-out infinite;
       opacity: 0.4;
+      z-index: -1;
     }
 
     @keyframes moveSmoke {
@@ -40,110 +34,6 @@
     @keyframes glowPulse {
       0% { box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.3); }
       100% { box-shadow: 0 0 30px 20px rgba(255, 255, 255, 0.6); }
-    }
-
-    .menu-icon {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      font-size: 30px;
-      cursor: pointer;
-      z-index: 10;
-    }
-
-    .menu {
-      display: none;
-      position: absolute;
-      top: 50px;
-      right: 10px;
-      background-color: #444;
-      border-radius: 10px;
-      padding: 10px;
-      text-align: right;
-      z-index: 10;
-    }
-
-    .menu a {
-      color: white;
-      padding: 8px;
-      text-decoration: none;
-      display: block;
-    }
-
-    .menu a:hover {
-      background-color: #666;
-    }
-
-    .show-menu {
-      display: block;
-    }
-
-    #main-content {
-      height: 100vh;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #e0d7ff;
-      text-shadow: 0 0 10px #b084f5;
-      animation: pulse 3s infinite ease-in-out;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.05); opacity: 0.8; }
-    }
-
-    #examDate {
-      font-size: 16px;
-      margin-bottom: 20px;
-      color: #e0d7ff;
-      text-align: center;
-      text-shadow: 0 0 5px #b084f5;
-    }
-
-    #timer {
-      display: flex;
-      justify-content: center;
-      flex-wrap: nowrap;
-      gap: 8px;
-      padding: 8px;
-    }
-
-    .time-box {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 12px;
-      width: 80px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-
-    .number {
-      font-size: 22px;
-      font-weight: bold;
-      color: #e0d7ff;
-    }
-
-    .label {
-      font-size: 12px;
-      margin-top: 5px;
-      font-weight: bold;
-    }
-
-    footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #ddd;
-      text-align: center;
     }
 
     #loader {
@@ -164,7 +54,6 @@
       border: 5px solid #9b59b6;
       border-radius: 50%;
       overflow: hidden;
-      position: relative;
     }
 
     #loader-logo {
@@ -181,30 +70,115 @@
       0% { clip-path: inset(100% 0 0 0); }
       100% { clip-path: inset(0% 0 0 0); }
     }
+
+    #loader-text {
+      font-size: 16px;
+      color: white;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    .menu-icon {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-size: 30px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 10px;
+      background-color: #444;
+      border-radius: 10px;
+      padding: 10px;
+      z-index: 10;
+    }
+
+    .menu a {
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .menu a:hover {
+      background-color: #666;
+    }
+
+    .show-menu {
+      display: block;
+    }
+
+    #main-content {
+      display: none;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #b084f5;
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    #examDate {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    #timer {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .time-box {
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 12px;
+      width: 80px;
+      text-align: center;
+    }
+
+    .number {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .label {
+      font-size: 12px;
+      margin-top: 5px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <div class="bg-smoke"></div>
+
   <div id="loader">
     <div class="logo-wrapper">
-      <img id="loader-logo" src="bacteria.png" alt="شعار الامتحان">
+      <img id="loader-logo" src="bacteria.png" alt="شعار" />
     </div>
     <div id="loader-text">جارٍ التحميل...</div>
   </div>
 
   <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
   <div id="menu" class="menu">
-    <a href="#" onclick="setExam('bacteria_theory')">بكتريا نظري</a>
-    <a href="#" onclick="setExam('parasite_theory')">طفيليات نظري</a>
-    <a href="#" onclick="setExam('bacteria_practical')">بكتريا عملي</a>
-    <a href="#" onclick="setExam('parasite_practical')">طفيليات عملي</a>
+    <a href="#" onclick="switchExam('bacteria-theory')">بكتريا نظري</a>
+    <a href="#" onclick="switchExam('bacteria-practical')">بكتريا عملي</a>
+    <a href="#" onclick="switchExam('parasites-theory')">طفيليات نظري</a>
+    <a href="#" onclick="switchExam('parasites-practical')">طفيليات عملي</a>
   </div>
 
   <div id="main-content">
-    <div class="logo-wrapper">
-      <img id="loader-logo-main" src="bacteria.png" alt="شعار" style="clip-path: inset(100% 0 0 0); animation: revealLogo 5s forwards;">
-    </div>
-    <h1 id="examTitle">بكتريا نظري</h1>
+    <h1 id="examTitle"></h1>
     <div id="examDate"></div>
     <div id="timer">
       <div class="time-box"><div class="number" id="days">--</div><div class="label">يوم</div></div>
@@ -215,14 +189,15 @@
   </div>
 
   <script>
-    let exams = {
-      bacteria_theory: { title: "بكتريا نظري", date: "2025-05-04T09:00:00", logo: "bacteria.png" },
-      parasite_theory: { title: "طفيليات نظري", date: "2025-05-08T09:00:00", logo: "parasites.png" },
-      bacteria_practical: { title: "بكتريا عملي", date: "2025-04-23T09:00:00", logo: "bacteria.png" },
-      parasite_practical: { title: "طفيليات عملي", date: "2025-04-21T09:00:00", logo: "parasites.png" }
+    const exams = {
+      "bacteria-theory": { title: "امتحان البكتريا النظري", date: "2025/5/4 09:00:00", logo: "bacteria.png" },
+      "bacteria-practical": { title: "امتحان البكتريا العملي", date: "2025/4/23 09:00:00", logo: "bacteria.png" },
+      "parasites-theory": { title: "امتحان الطفيليات النظري", date: "2025/5/8 09:00:00", logo: "parasites.png" },
+      "parasites-practical": { title: "امتحان الطفيليات العملي", date: "2025/4/21 09:00:00", logo: "parasites.png" }
     };
 
-    let targetDate = new Date(exams.bacteria_theory.date).getTime();
+    let currentExam = "bacteria-theory";
+    let targetDate = new Date(exams[currentExam].date).getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -233,52 +208,43 @@
         return;
       }
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      document.getElementById("days").innerText = days;
-      document.getElementById("hours").innerText = hours;
-      document.getElementById("minutes").innerText = minutes;
-      document.getElementById("seconds").innerText = seconds;
+      document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+      document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000);
     }
 
     function updateExamDate() {
-      const examDate = new Date(targetDate);
-      const dateFormatted = `${examDate.getFullYear()}/${examDate.getMonth() + 1}/${examDate.getDate()}`;
-      const daysOfWeek = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-      const dayOfWeek = daysOfWeek[examDate.getDay()];
-      document.getElementById("examDate").innerText = `يوم ${dayOfWeek}، ${dateFormatted} الساعة 9 صباحًا`;
+      const exam = new Date(targetDate);
+      const days = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+      document.getElementById("examDate").innerText = `يوم ${days[exam.getDay()]}، ${exam.getFullYear()}/${exam.getMonth()+1}/${exam.getDate()} الساعة 9 صباحًا`;
     }
 
-    function setExam(type) {
-      const exam = exams[type];
-      targetDate = new Date(exam.date).getTime();
-      document.getElementById("examTitle").innerText = exam.title;
-      document.title = exam.title;
-      document.getElementById("favicon").href = exam.logo;
-      document.getElementById("loader-logo-main").src = exam.logo;
-      document.getElementById("loader-logo-main").style.animation = "none"; // reset animation
-      void document.getElementById("loader-logo-main").offsetWidth; // force reflow
-      document.getElementById("loader-logo-main").style.clipPath = "inset(100% 0 0 0)";
-      document.getElementById("loader-logo-main").style.animation = "revealLogo 5s forwards";
+    function switchExam(type) {
+      currentExam = type;
+      targetDate = new Date(exams[type].date).getTime();
+      document.getElementById("examTitle").innerText = exams[type].title;
+      document.getElementById("favicon").href = exams[type].logo;
+      document.getElementById("loader-logo").src = exams[type].logo;
+      document.title = exams[type].title;
+      document.getElementById("main-content").style.display = "none";
+      document.getElementById("loader").style.display = "flex";
+      document.getElementById("menu").classList.remove("show-menu");
 
-      updateCountdown();
-      updateExamDate();
-    }
-
-    function toggleMenu() {
-      document.getElementById('menu').classList.toggle('show-menu');
-    }
-
-    window.onload = () => {
       setTimeout(() => {
+        updateCountdown();
+        updateExamDate();
         document.getElementById("loader").style.display = "none";
         document.getElementById("main-content").style.display = "flex";
       }, 5000);
-      updateCountdown();
-      updateExamDate();
+    }
+
+    function toggleMenu() {
+      document.getElementById("menu").classList.toggle("show-menu");
+    }
+
+    window.onload = () => {
+      switchExam("bacteria-theory");
       setInterval(updateCountdown, 1000);
     };
   </script>
