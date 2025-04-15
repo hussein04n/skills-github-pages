@@ -1,86 +1,144 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>عدادات الامتحانات</title>
+  <title>عداد الامتحانات</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to bottom, #2d0b41, #1a082d);
-      color: #7ee7f9;
-      overflow-x: hidden;
+      font-family: 'Arial', sans-serif;
+      background: #f0f0f0;
+      overflow: hidden;
     }
-    .container {
-      max-width: 500px;
-      margin: auto;
-      padding: 30px 20px;
-      text-align: center;
+
+    .menu-icon {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+      cursor: pointer;
     }
-    h1 {
-      font-size: 1.8em;
-    }
-    .countdown {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .countdown div {
-      background-color: #063348;
-      padding: 15px;
-      border-radius: 10px;
-      min-width: 60px;
-    }
-    .countdown span {
-      display: block;
-      font-size: 1.5em;
+
+    .menu-icon div {
+      width: 30px;
+      height: 4px;
+      background-color: #333;
+      margin: 6px 0;
     }
 
     .menu {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      z-index: 1000;
-    }
-    .menu input {
       display: none;
-    }
-    .menu label {
-      cursor: pointer;
-      font-size: 30px;
-      color: white;
-    }
-    .menu ul {
-      background-color: #000000dd;
-      list-style: none;
-      padding: 10px;
-      margin: 0;
-      display: none;
-      position: absolute;
-      top: 40px;
+      position: fixed;
+      top: 0;
       left: 0;
-      border-radius: 5px;
-    }
-    .menu input:checked + label + ul {
-      display: block;
-    }
-    .menu ul li {
-      margin: 5px 0;
-    }
-    .menu ul li a {
-      color: white;
-      text-decoration: none;
+      background: white;
+      width: 200px;
+      height: 100vh;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      padding-top: 60px;
+      z-index: 999;
     }
 
-    .organism {
+    .menu a {
+      display: block;
+      padding: 15px;
+      color: #333;
+      text-decoration: none;
+      border-bottom: 1px solid #eee;
+    }
+
+    .menu a:hover {
+      background: #f9f9f9;
+    }
+
+    .page {
+      display: none;
+      height: 100vh;
+      position: relative;
+      padding-top: 60px;
+      text-align: center;
+    }
+
+    .active {
+      display: block;
+    }
+
+    .countdown-circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 10px solid purple;
+      margin: auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fill {
+      background-color: purple;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 0%;
+      transition: height 1s linear;
+    }
+
+    .timer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: purple;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .loader-screen {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      flex-direction: column;
+    }
+
+    .logo-loader {
+      width: 150px;
+      height: 150px;
+      border: 10px solid purple;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .logo-fill {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 0%;
+      background: purple;
+      transition: height 5s linear;
+      z-index: 1;
+    }
+
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      position: relative;
+      z-index: 2;
+    }
+
+    .microbe {
       position: absolute;
       width: 20px;
       height: 10px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(102, 0, 102, 0.3);
       border-radius: 50%;
-      animation: float 20s linear infinite;
+      animation: float 20s infinite linear;
     }
 
     @keyframes float {
@@ -88,7 +146,7 @@
         transform: translateY(0) translateX(0);
       }
       50% {
-        transform: translateY(-100vh) translateX(50vw);
+        transform: translateY(-20px) translateX(10px);
       }
       100% {
         transform: translateY(0) translateX(0);
@@ -98,80 +156,118 @@
 </head>
 <body>
 
-<div class="menu">
-  <input type="checkbox" id="toggleMenu">
-  <label for="toggleMenu">&#9776;</label>
-  <ul>
-    <li><a href="#bacteria">امتحان البكتريا الوزاري</a></li>
-    <li><a href="#parasites">امتحان الطفيليات الوزاري</a></li>
-  </ul>
+<div class="menu-icon" onclick="toggleMenu()">
+  <div></div><div></div><div></div>
 </div>
 
-<div id="bacteria" class="container">
-  <h1>امتحان البكتريا الوزاري</h1>
-  <p>يوم الأحد: 2025/5/4 الساعة 9 صباحاً</p>
-  <div class="countdown" id="bacteria-timer">
-    <div><span id="b-d">0</span>يوم</div>
-    <div><span id="b-h">0</span>ساعة</div>
-    <div><span id="b-m">0</span>دقيقة</div>
-    <div><span id="b-s">0</span>ثانية</div>
+<div class="menu" id="menu">
+  <a href="#" onclick="switchPage('bacteria')">عداد البكتريا</a>
+  <a href="#" onclick="switchPage('parasite')">عداد الطفيليات</a>
+</div>
+
+<!-- Loader -->
+<div class="loader-screen" id="loader">
+  <div class="logo-loader">
+    <div class="logo-fill" id="logo-fill"></div>
+    <img src="bacteria.png" class="logo-img" id="loader-logo" />
   </div>
 </div>
 
-<div id="parasites" class="container">
-  <h1>امتحان الطفيليات الوزاري</h1>
-  <p>يوم الخميس: 2025/5/8 الساعة 9 صباحاً</p>
-  <div class="countdown" id="parasites-timer">
-    <div><span id="p-d">0</span>يوم</div>
-    <div><span id="p-h">0</span>ساعة</div>
-    <div><span id="p-m">0</span>دقيقة</div>
-    <div><span id="p-s">0</span>ثانية</div>
+<!-- صفحة البكتريا -->
+<div class="page active" id="bacteria-page">
+  <h2>عداد امتحان البكتريا</h2>
+  <div class="countdown-circle">
+    <div class="fill" id="bacteria-fill"></div>
+    <div class="timer" id="bacteria-timer"></div>
+  </div>
+</div>
+
+<!-- صفحة الطفيليات -->
+<div class="page" id="parasite-page">
+  <h2>عداد امتحان الطفيليات</h2>
+  <div class="countdown-circle">
+    <div class="fill" id="parasite-fill"></div>
+    <div class="timer" id="parasite-timer"></div>
   </div>
 </div>
 
 <script>
-  function startCountdown(idPrefix, targetDate) {
-    const d = document.getElementById(idPrefix + '-d');
-    const h = document.getElementById(idPrefix + '-h');
-    const m = document.getElementById(idPrefix + '-m');
-    const s = document.getElementById(idPrefix + '-s');
+  const loader = document.getElementById('loader');
+  const logoFill = document.getElementById('logo-fill');
+  const loaderLogo = document.getElementById('loader-logo');
 
-    function update() {
+  function toggleMenu() {
+    const menu = document.getElementById('menu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function switchPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`${page}-page`).classList.add('active');
+
+    // Change logo and restart loader
+    loader.style.display = 'flex';
+    logoFill.style.height = '0%';
+    loaderLogo.src = page === 'bacteria' ? 'bacteria.png' : 'parasites.png';
+    setTimeout(() => {
+      logoFill.style.height = '100%';
+    }, 100);
+    setTimeout(() => {
+      loader.style.display = 'none';
+    }, 5000);
+  }
+
+  function countdown(targetDate, timerId, fillId) {
+    const target = new Date(targetDate).getTime();
+    setInterval(() => {
       const now = new Date().getTime();
-      const distance = targetDate - now;
+      const distance = target - now;
 
-      if (distance < 0) return;
+      if (distance <= 0) {
+        document.getElementById(timerId).innerText = "انتهى الوقت!";
+        document.getElementById(fillId).style.height = '100%';
+        return;
+      }
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      d.textContent = days;
-      h.textContent = hours;
-      m.textContent = minutes;
-      s.textContent = seconds;
-    }
+      document.getElementById(timerId).innerText =
+        `${days} يوم ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية`;
 
-    setInterval(update, 1000);
-    update();
+      const percent = 100 - ((distance / (1000 * 60 * 60 * 24 * 30)) * 100);
+      document.getElementById(fillId).style.height = Math.min(percent, 100) + '%';
+    }, 1000);
   }
 
-  startCountdown('b', new Date('2025-05-04T09:00:00').getTime());
-  startCountdown('p', new Date('2025-05-08T09:00:00').getTime());
+  // Start both countdowns
+  countdown("2025-05-04T09:00:00", "bacteria-timer", "bacteria-fill");
+  countdown("2025-05-08T09:00:00", "parasite-timer", "parasite-fill");
 
-  const bacteriaCount = 7;
-  for (let i = 0; i < bacteriaCount; i++) {
-    const el = document.createElement('div');
-    el.className = 'organism';
-    el.style.top = Math.random() * 100 + 'vh';
-    el.style.left = Math.random() * 100 + 'vw';
-    el.style.animationDuration = 20 + Math.random() * 10 + 's';
-    el.style.opacity = 0.1 + Math.random() * 0.3;
-    el.style.backgroundColor = '#fff';
-    el.style.width = 10 + Math.random() * 10 + 'px';
-    el.style.height = 5 + Math.random() * 5 + 'px';
-    document.body.appendChild(el);
+  // Initial loader
+  window.onload = () => {
+    loader.style.display = 'flex';
+    setTimeout(() => {
+      logoFill.style.height = '100%';
+    }, 100);
+    setTimeout(() => {
+      loader.style.display = 'none';
+    }, 5000);
+  };
+
+  // Add animated microbes
+  const bacteriaPage = document.getElementById('bacteria-page');
+  const parasitePage = document.getElementById('parasite-page');
+  for (let i = 0; i < 7; i++) {
+    const microbe = document.createElement('div');
+    microbe.classList.add('microbe');
+    microbe.style.left = Math.random() * 100 + 'vw';
+    microbe.style.top = Math.random() * 100 + 'vh';
+    microbe.style.animationDuration = (10 + Math.random() * 10) + 's';
+    bacteriaPage.appendChild(microbe.cloneNode(true));
+    parasitePage.appendChild(microbe.cloneNode(true));
   }
 </script>
 
